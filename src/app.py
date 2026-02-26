@@ -11,6 +11,7 @@ def webhook():
 
     #Aqui decimos que si el request es un get guarda estos datos    
     if request.method == "GET":
+        
      #guardo las parametros de verificacion 
         modo = request.args.get("hub.mode")
         challenge = request.args.get("hub.challenge")
