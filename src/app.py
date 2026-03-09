@@ -46,16 +46,18 @@ def webhook():
         print("Datos del json", data)
    
 
-
+        
     if messageText.upper() == "Tono".upper():
        sendMessage.welcomeMessage(message["from"])
        if idButton == resouceMenu.idButtonAgendar:
-            if connexion.lookForUser(message["from"]) == False:
+            if connexion.lookForUser(message["from"]) is False:
                 sendMessage.simpleMessage(message["from"],resouceMenu.userDontRegistre)
-            elif connexion.lookForUser(message["from"]) == True:
-                sendMessage.simpleMessage(message["from"],resouceMenu.timeAvilable)
-
                 return jsonify({"status": "ok"}), 200
+            elif connexion.lookForUser(message["from"]) is True:
+                sendMessage.simpleMessage(message["from"],resouceMenu.timeAvilable)
+                return jsonify({"status": "ok"}), 200
+
+    return jsonify({"status": "ok"}), 200
        
 
 
