@@ -35,7 +35,6 @@ def webhook():
 
     if request.method == "POST":
         data = request.get_json()
-        data = json.loads(data)
       
 
         message = data["entry"][0]["changes"][0]["value"]["messages"][0]
