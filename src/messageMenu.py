@@ -1,5 +1,5 @@
-from config import whatsappToken
-from resourceMenu import Resource
+from src.config import whatsappToken
+from src.resourceMenu import Resource
 import requests
 class Menu:
     global resourceMenu
@@ -63,3 +63,23 @@ class Menu:
 
      response = requests.post(url, headers=headers, json=data , timeout=30)
      return response
+    
+    def simpleMessage(self,numberClient, textBody):
+         url = "https://graph.facebook.com/v25.0/971935982677896/messages"
+         headers = {
+    "Authorization": f"Bearer {whatsappToken}",
+    "Content-Type": "application/json",
+   
+    }
+
+         data = {
+   "messaging_product": "whatsapp",
+   "recipient_type": "individual",
+   "to": f"{numberClient}",
+   "type": "text",
+   "text": {
+    "body": f"{textBody}"
+    }
+   }
+         response = requests.post(url, headers=headers, json=data , timeout=30)
+         return response

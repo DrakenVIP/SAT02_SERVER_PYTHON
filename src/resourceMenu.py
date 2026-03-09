@@ -24,3 +24,24 @@ Nuestro sistema digital está diseñado para ayudarte a gestionar tus turnos de 
       idButtonAgendar = "agendar-button"
       idButtonVerTurno = "turno-button"
       idButtonInformacion = "informacion-button"
+
+
+
+      #Horas disponibles
+      timeAvilable ="""
+1.  09:00 AM
+2.  09:50 AM
+3.  10:40 AM
+4.  11:30 AM
+5.  12:20 PM
+6.  01:10 PM
+7.  02:00 PM
+8.  02:50 PM
+9.  03:40 PM
+10. 04:30 PM
+11. 05:20 PM
+12. 06:10 PM
+13. 07:00 PM
+14. 07:50 PM
+15. 08:40 PM
+"""

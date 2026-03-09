@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
-from messageMenu import Menu
-from config import verify_token,mySqlDb,mySqlHost,mySqlPassword,mySqlUser,whatsappToken
+from src.messageMenu import Menu
+from src.resourceMenu import Resource
+from src.connexion import ConnexionSql
+from src.config import verify_token,mySqlDb,mySqlHost,mySqlPassword,mySqlUser,whatsappToken
 import requests
 
 app = Flask(__name__)
@@ -10,7 +12,12 @@ def home():
 
 @app.route("/webhook", methods=["GET","POST"])
 def webhook():
-
+    #Se crea una instancia de la clase Menu que contiene los metodos para enviar mensajes
+    sendMessage = Menu()
+    #Se crea una instancia de la clase Resource que contiene los recursos de la app
+    resouceMenu = Resource()
+    #Se crea una instancia de la clase ConnexionSql que contiene los metodos para hacer consulta y insert en la base de datos
+    connexion = ConnexionSql()
     #Aqui decimos que si el request es un get guarda estos datos    
     if request.method == "GET":
         
@@ -34,15 +41,20 @@ def webhook():
         numberClient = data["entry"][0]["changes"][0]["value"]["messages"][0]["from"]
         messegaText = data["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
+        idButton = data["entry"][0]["changes"][0]["value"]["messages"][0]["interactive"]["button_reply"]["id"]
 
-    sendMessage = Menu()
+   
 
 
     if messegaText.upper() == "Tono".upper():
        sendMessage.welcomeMessage(numberClient,)
- 
- 
-    return jsonify({"status": "ok"}), 200
+       if idButton == resouceMenu.idButtonAgendar:
+            if connexion.lookForUser(numberClient) == False:
+                sendMessage.simpleMessage(numberClient,resouceMenu.userDontRegistre)
+            elif connexion.lookForUser(numberClient) == True:
+                sendMessage.simpleMessage(numberClient,resouceMenu.timeAvilable)
+
+                return jsonify({"status": "ok"}), 200
 
 
 
