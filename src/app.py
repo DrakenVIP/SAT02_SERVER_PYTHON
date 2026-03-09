@@ -48,14 +48,14 @@ def webhook():
 
     if messegaText.upper() == "Tono".upper():
        sendMessage.welcomeMessage(numberClient,)
-       if idButton == resouceMenu.idButtonAgendar:
+    ''' if idButton == resouceMenu.idButtonAgendar:
             if connexion.lookForUser(numberClient) == False:
                 sendMessage.simpleMessage(numberClient,resouceMenu.userDontRegistre)
             elif connexion.lookForUser(numberClient) == True:
                 sendMessage.simpleMessage(numberClient,resouceMenu.timeAvilable)
 
                 return jsonify({"status": "ok"}), 200
-
+       '''
 
 
 if __name__ == "__main__":
