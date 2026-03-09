@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from src.messageMenu import Menu
-from config import verify_token,mySqlDb,mySqlHost,mySqlPassword,mySqlUser,whatsappToken
+from src.config import verify_token,mySqlDb,mySqlHost,mySqlPassword,mySqlUser,whatsappToken
 import requests
 
 app = Flask(__name__)
