@@ -1,5 +1,5 @@
 from config import whatsappToken
-from resourceMenu import Resource
+from src.resourceMenu import Resource
 import requests
 class Menu:
     global resourceMenu
