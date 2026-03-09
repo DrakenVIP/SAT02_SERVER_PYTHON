@@ -3,6 +3,7 @@ from src.messageMenu import Menu
 from src.resourceMenu import Resource
 from src.connexion import ConnexionSql
 from src.config import verify_token
+import json
 import requests
 
 app = Flask(__name__)
@@ -34,28 +35,29 @@ def webhook():
 
     if request.method == "POST":
         data = request.get_json()
-        print("Datos del json", data)
+        data = json.loads(data)
+      
 
+        message = data["entry"][0]["changes"][0]["value"]["messages"][0]
         profileName = data["entry"][0]["changes"][0]["value"]["contacts"][0]["profile"]["name"]
         idMessage = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
-        numberClient = data["entry"][0]["changes"][0]["value"]["messages"][0]["from"]
-        messegaText = data["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+        messageText = message.get("text", {}).get("body", "")
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
-        idButton = data["entry"][0]["changes"][0]["value"]["messages"][0]["interactive"]["button_reply"]["id"]
-
+        idButton = message.get("interactive", {}).get("button_reply", {}).get("id")
+        print("Datos del json", data)
    
 
 
-    if messegaText.upper() == "Tono".upper():
-       sendMessage.welcomeMessage(numberClient,)
-    ''' if idButton == resouceMenu.idButtonAgendar:
-            if connexion.lookForUser(numberClient) == False:
-                sendMessage.simpleMessage(numberClient,resouceMenu.userDontRegistre)
-            elif connexion.lookForUser(numberClient) == True:
-                sendMessage.simpleMessage(numberClient,resouceMenu.timeAvilable)
+    if messageText.upper() == "Tono".upper():
+       sendMessage.welcomeMessage(message["from"])
+       if idButton == resouceMenu.idButtonAgendar:
+            if connexion.lookForUser(message["from"]) == False:
+                sendMessage.simpleMessage(message["from"],resouceMenu.userDontRegistre)
+            elif connexion.lookForUser(message["from"]) == True:
+                sendMessage.simpleMessage(message["from"],resouceMenu.timeAvilable)
 
                 return jsonify({"status": "ok"}), 200
-       '''
+       
 
 
 if __name__ == "__main__":
