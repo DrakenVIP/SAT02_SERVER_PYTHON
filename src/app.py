@@ -1,9 +1,8 @@
 from flask import Flask, request, jsonify
 from src.messageMenu import Menu
-<<<<<<< HEAD
 from src.resourceMenu import Resource
 from src.connexion import Connexion
-from src.config import verify_t
+from src.config import verify_token
 import requests
 
 app = Flask(__name__)
