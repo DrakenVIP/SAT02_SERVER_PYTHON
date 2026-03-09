@@ -3,6 +3,7 @@ from src.messageMenu import Menu
 from src.resourceMenu import Resource
 from src.connexion import ConnexionSql
 from src.config import verify_token
+import os
 import json
 import requests
 
@@ -62,7 +63,8 @@ def webhook():
 
 
 if __name__ == "__main__":
-   app.run()
+   port = int(os.environ.get("PORT", 5000))
+   app.run(host="0.0.0.0", port=port)
        
 
  
