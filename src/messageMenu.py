@@ -1,4 +1,4 @@
-from config import whatsappToken
+from src.config import whatsappToken
 from src.resourceMenu import Resource
 import requests
 class Menu:
