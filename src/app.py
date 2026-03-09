@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
+from messageMenu import Menu
 from config import verify_token,mySqlDb,mySqlHost,mySqlPassword,mySqlUser,whatsappToken
 import requests
 
 app = Flask(__name__)
-
 @app.route("/")
 def home():
    return "Servidor en linea"
@@ -35,27 +35,11 @@ def webhook():
         messegaText = data["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
 
+    sendMessage = Menu()
 
 
-    if messegaText.upper() == "Hola".upper():
-        url = "https://graph.facebook.com/v25.0/971935982677896/messages"
-        headers = {
-    "Authorization": f"Bearer {whatsappToken}",
-    "Content-Type": "application/json",
-   
-    }
-
-    data = {
-  "messaging_product": "whatsapp",
-  "recipient_type": "individual",
-  "to": f"{numberClient}",
-  "type": "text",
-  "text": {
-    "body": f"Hola buenos dias, como estas {profileName}"
-    }
-   }
-    response = requests.post(url, headers=headers, json=data , timeout=30)
-    print("Estado de la verificacion",response.status_code)
+    if messegaText.upper() == "Tono".upper():
+       sendMessage.welcomeMessage(numberClient,)
  
     return jsonify({"status": "ok"}), 200
 
