@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from src.messageMenu import Menu
 from src.resourceMenu import Resource
-from src.connexion import Connexion
+from src.connexion import ConnexionSql
 from src.config import verify_token
 import requests
 
