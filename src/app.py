@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from config import verify_token,mySqlDb,mySqlHost,mySqlPassword,mySqlUser,whatsappToken
 import requests
 
 app = Flask(__name__)
@@ -19,7 +20,7 @@ def webhook():
         token = request.args.get("hub.verify_token")
 
     #Valida que modo y token sean correcto
-        if modo == "subscribe" and token == "maria123":
+        if modo == "subscribe" and token == verify_token:
             return challenge, 200
         else:
          return "Error de autenticacion", 403
@@ -39,7 +40,7 @@ def webhook():
     if messegaText.upper() == "Hola".upper():
         url = "https://graph.facebook.com/v25.0/971935982677896/messages"
         headers = {
-    "Authorization": "Bearer EAAbPAueSpAUBQ6Vj2gHGT9JbYrWD8sZAjiyy8MZAtLL1ZB7ce4ECxb3uMMvFFH1w4kFtcqFRxIfJEqAZAJ7MKpX4aFHrsiDoSXQzCYcGQqzpfrTuNdLiJRg3A1YRZBLCmZAPfZB64YBXLMToUFHLptbTwATQhTxLAyxDUioKg4llWFjLoOr4ltbmMx8tuQ5ZAI0llWS9JcS3autpqfjCtncoPkGO9ZBmnkfeKuYYB",
+    "Authorization": f"Bearer {whatsappToken}",
     "Content-Type": "application/json",
    
     }
