@@ -18,10 +18,5 @@ class ConnexionSql:
     def lookForUser(numberClient):
         result = cnnx.cursor()
         result.execute(f"SELECT phoneNumber from Clients where = {numberClient}")  
-        register = result.fetchall()
-        if register == False:
-            return False
-        elif register == True:
-            return True
-        else:
-            print("Algo paso no se encontro numero pero tampoco se valido no estuviera")
+        return result.fetchall()
+       
