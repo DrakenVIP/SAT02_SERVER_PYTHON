@@ -47,8 +47,14 @@ def webhook():
         messageText = message.get("text", {}).get("body", "").strip()
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
         idButton = (message.get("interactive", {}).get("button_reply", {}).get("id") or "").strip()
+        idMessage = message.get("id")
 
-        print("Datos del json", data)
+        # Evitar duplicados
+        if already_processed(idMessage, cnnx):
+            return jsonify({"status": "ok"}), 200
+        else:
+            mark_processed(idMessage, cnnx)
+            print("Datos del json", data)
 
         # --- TU LÓGICA AQUÍ DENTRO ---
 
