@@ -47,20 +47,24 @@ def webhook():
         print("Datos del json", data)
    
 
-        
+   #Cuando el usuario manda una palabra clave
     if messageText.upper() == "Tono".upper():
        sendMessage.welcomeMessage(message["from"])
-       if idButton == resouceMenu.idButtonAgendar:
-            if connexion.lookForUser(message["from"]) is False:
-                sendMessage.simpleMessage(message["from"],resouceMenu.userDontRegistre)
-                return jsonify({"status": "ok"}), 200
-            elif connexion.lookForUser(message["from"]) is True:
+       return jsonify({"status": "ok"}), 200
+
+   #Cuando el usuario preciona agendar cita y no esta regitrado
+    if idButton == resouceMenu.idButtonAgendar:
+       if connexion.lookForUser(message["from"]) is False:
+          sendMessage.simpleMessage(message["from"],resouceMenu.userDontRegistre)
+          return jsonify({"status": "ok"}), 200
+          
+   #Cuando el usuario preciona agendar cita y esta registrado  
+    if idButton == resouceMenu.idButtonAgendar:
+       if connexion.lookForUser(message["from"]) is True:
                 sendMessage.simpleMessage(message["from"],resouceMenu.timeAvilable)
                 return jsonify({"status": "ok"}), 200
 
     return jsonify({"status": "ok"}), 200
-       
-
 
 if __name__ == "__main__":
    port = int(os.environ.get("PORT", 5000))
