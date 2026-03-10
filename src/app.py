@@ -53,7 +53,7 @@ def webhook():
         # --- TU LÓGICA AQUÍ DENTRO ---
 
         print(type(idButton), "id del boton ")
-        print(f"resultado de a busqueda: {connexion.lookForUser(message["from"])}")
+        #print(f"resultado de a busqueda: {connexion.lookForUser(message["from"])}")
 
 
         # Cuando el usuario manda una palabra clave
