@@ -52,6 +52,9 @@ def webhook():
 
         # --- TU LÓGICA AQUÍ DENTRO ---
 
+        print(idButton, "id del boton ")
+        
+
         # Cuando el usuario manda una palabra clave
         if messageText.upper() == "TONO".upper():
             sendMessage.welcomeMessage(message["from"])
