@@ -44,6 +44,7 @@ def webhook():
         messageText = message.get("text", {}).get("body", "")
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
         idButton = message.get("interactive", {}).get("button_reply", {}).get("id")
+        numberClientReply = message.get("messages", []).get("from", "")
         print("Datos del json", data)
    
 
@@ -54,13 +55,13 @@ def webhook():
 
    #Cuando el usuario preciona agendar cita y no esta regitrado
     if idButton == resouceMenu.idButtonAgendar:
-       if connexion.lookForUser(message["from"]) is False:
+       if connexion.lookForUser(numberClientReply) is False:
           sendMessage.simpleMessage(message["from"],resouceMenu.userDontRegistre)
           return jsonify({"status": "ok"}), 200
           
    #Cuando el usuario preciona agendar cita y esta registrado  
     if idButton == resouceMenu.idButtonAgendar:
-       if connexion.lookForUser(message["from"]) is True:
+       if connexion.lookForUser(numberClientReply) is True:
                 sendMessage.simpleMessage(message["from"],resouceMenu.timeAvilable)
                 return jsonify({"status": "ok"}), 200
 
