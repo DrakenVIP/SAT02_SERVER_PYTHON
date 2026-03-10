@@ -44,7 +44,7 @@ def webhook():
         messageText = message.get("text", {}).get("body", "")
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
         idButton = message.get("interactive", {}).get("button_reply", {}).get("id")
-        numberClientReply = message.get("messages", []).get("from", "")
+        numberClientReply = message.get("from", "")
         print("Datos del json", data)
    
 
