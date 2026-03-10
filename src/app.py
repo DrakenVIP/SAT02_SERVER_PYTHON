@@ -66,7 +66,9 @@ def webhook():
             elif connexion.lookForUser(message["from"]) is True:
                 sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
                 return jsonify({"status": "ok"}), 200
-
+        else:
+            return jsonify({"status": "ok"}), 200
+        
      # Respuesta final
     return jsonify({"status": "ok"}), 200
 
