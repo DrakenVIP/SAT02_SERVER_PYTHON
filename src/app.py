@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from src.messageMenu import Menu
 from src.resourceMenu import Resource
-from src.connexion import ConnexionSql
+from src.connexion import ConnexionSql, cnnx
 from src.config import verify_token
 import os
 import json
@@ -44,9 +44,9 @@ def webhook():
         message = data["entry"][0]["changes"][0]["value"]["messages"][0]
         profileName = data["entry"][0]["changes"][0]["value"]["contacts"][0]["profile"]["name"]
         idMessage = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
-        messageText = message.get("text", {}).get("body", "")
+        messageText = message.get("text", {}).get("body", "").strip()
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
-        idButton = message.get("interactive", {}).get("button_reply", {}).get("id")
+        idButton = message.get("interactive", {}).get("button_reply", {}).get("id").strip()
         print("Datos del json", data)
 
         # --- TU LÓGICA AQUÍ DENTRO ---
@@ -54,16 +54,16 @@ def webhook():
 
 
         # Cuando el usuario manda una palabra clave
-        if messageText.upper() == "TONO".upper():
+        if messageText and messageText.upper() == "TONO".upper():
             sendMessage.welcomeMessage(message["from"])
             return jsonify({"status": "ok"}), 200
 
         # Cuando el usuario presiona agendar cita y no está registrado
         if idButton == resouceMenu.idButtonAgendar:
-            if connexion.lookForUser(message["from"]) is False:
+            if connexion.lookForUser(message["from"], cnnx) is False:
                 sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                 return jsonify({"status": "ok"}), 200
-            elif connexion.lookForUser(message["from"]) is True:
+            elif connexion.lookForUser(message["from"],cnnx) is True:
                 sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
                 return jsonify({"status": "ok"}), 200
         else:

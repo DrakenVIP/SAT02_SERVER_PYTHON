@@ -15,7 +15,7 @@ class ConnexionSql:
     else:
         print('Good connecting')
 
-    def lookForUser(self,numberClient):
+    def lookForUser(self,numberClient,cnnx):
         sql = "SELECT 1 FROM Clients WHERE phoneNumber = %s LIMIT 1"
         with cnnx.cursor() as cur:
             cur.execute(sql, (numberClient,))
