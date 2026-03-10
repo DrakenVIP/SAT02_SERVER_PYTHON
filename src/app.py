@@ -63,15 +63,12 @@ def webhook():
             if connexion.lookForUser(message["from"]) is False:
                 sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                 return jsonify({"status": "ok"}), 200
-
-        # Cuando el usuario presiona agendar cita y está registrado
-        if idButton == resouceMenu.idButtonAgendar:
-            if connexion.lookForUser(message["from"]) is True:
+            elif connexion.lookForUser(message["from"]) is True:
                 sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
                 return jsonify({"status": "ok"}), 200
 
-        # Respuesta final
-        return jsonify({"status": "ok"}), 200
+     # Respuesta final
+    return jsonify({"status": "ok"}), 200
 
 
 if __name__ == "__main__":
