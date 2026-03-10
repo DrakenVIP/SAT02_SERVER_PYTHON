@@ -16,7 +16,8 @@ class ConnexionSql:
         print('Good connecting')
 
     def lookForUser(numberClient):
-        result = cnnx.cursor()
-        result.execute(f"SELECT phoneNumber from Clients where = {numberClient}")  
-        return result.fetchall()
+        sql = "SELECT 1 phoneNumber from Clients where phoneNumber = %s limit 1"
+        with cnnx.cursor() as cur:
+            cur.execute(sql, (numberClient,))
+        return cur.fetchone() is not None
        
