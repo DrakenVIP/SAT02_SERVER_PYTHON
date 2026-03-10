@@ -52,24 +52,21 @@ def webhook():
 
         # --- TU LÓGICA AQUÍ DENTRO ---
 
-        print(type(idButton), "id del boton ")
-        #print(f"resultado de a busqueda: {connexion.lookForUser(message["from"])}")
 
 
         # Cuando el usuario manda una palabra clave
         if messageText.upper() == "TONO".upper():
-            sendMessage.welcomeMessage(message["from"])
             sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
             return jsonify({"status": "ok"}), 200
 
         # Cuando el usuario presiona agendar cita y no está registrado
-        if idButton == "agendar-button":
+        if idButton == resouceMenu.idButtonAgendar:
             if connexion.lookForUser(message["from"]) is False:
                 sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                 return jsonify({"status": "ok"}), 200
 
         # Cuando el usuario presiona agendar cita y está registrado
-        if idButton == "agendar-button":
+        if idButton == resouceMenu.idButtonAgendar:
             if connexion.lookForUser(message["from"]) is True:
                 sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
                 return jsonify({"status": "ok"}), 200
