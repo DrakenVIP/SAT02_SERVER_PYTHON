@@ -46,7 +46,8 @@ def webhook():
         idMessage = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
         messageText = message.get("text", {}).get("body", "").strip()
         timestamp = data["entry"][0]["changes"][0]["value"]["messages"][0]["id"]
-        idButton = message.get("interactive", {}).get("button_reply", {}).get("id").strip()
+        idButton = (message.get("interactive", {}).get("button_reply", {}).get("id") or "").strip()
+
         print("Datos del json", data)
 
         # --- TU LÓGICA AQUÍ DENTRO ---
@@ -54,7 +55,7 @@ def webhook():
 
 
         # Cuando el usuario manda una palabra clave
-        if messageText and messageText.upper() == "TONO".upper():
+        if messageText and messageText.upper() == "TONO":
             sendMessage.welcomeMessage(message["from"])
             return jsonify({"status": "ok"}), 200
 
