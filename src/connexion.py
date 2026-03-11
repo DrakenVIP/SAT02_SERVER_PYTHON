@@ -22,12 +22,12 @@ class ConnexionSql:
             result = cur.fetchone()   # consumir aquí
         return result is not None
     
-    def already_processed(idMessage, cnnx):
+    def already_processed(self,idMessage, cnnx):
         cursor = cnnx.cursor()
         cursor.execute("SELECT 1 FROM processed_messages WHERE id_message = %s", (idMessage,))
         return cursor.fetchone() is not None
 
-    def mark_processed(idMessage, cnnx):
+    def mark_processed(self,idMessage, cnnx):
         cursor = cnnx.cursor()
         cursor.execute("INSERT INTO processed_messages (id_message) VALUES (%s)", (idMessage,))
         cnnx.commit()
