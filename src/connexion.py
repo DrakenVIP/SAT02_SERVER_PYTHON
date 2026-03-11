@@ -26,7 +26,7 @@ class ConnexionSql:
         sql= "SELECT 1 FROM processed_messages WHERE id_message = %s"
         with cnnx.cursor() as cur:
              cur.execute(sql, (idMessage,))
-             return cursor.fetchone() is not None
+             return cur.fetchone() is not None
 
     def mark_processed(self,idMessage, cnnx):
         sql = "INSERT INTO processed_messages (id_message) VALUES (%s)"
