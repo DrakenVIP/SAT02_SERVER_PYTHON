@@ -1,9 +1,20 @@
 import os
 import mysql.connector
-from mysql.connector import errorcode
+from mysql.connector import errorcode, pooling
 class ConnexionSql:
+    pool = pooling.MySQLConnectionPool(
+    pool_name="mypool",
+    pool_size=5,
+    host= os.getenv("MYSQL_HOST"),
+    user= os.getenv("MYSQL_USER"),
+    database= os.getenv("MYSQL_DB"),password=os.getenv("MYSQL_PASSWORD"),
+    database= os.getenv("MYSQL_DB")
+)
+
+    # En cada request:
+    cnnx = pool.get_connection()
+
     try:
-        global cnnx
         cnnx = mysql.connector.connect(user= os.getenv("MYSQL_USER"),host= os.getenv("MYSQL_HOST"),database= os.getenv("MYSQL_DB"),password=os.getenv("MYSQL_PASSWORD"))
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
