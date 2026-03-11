@@ -50,10 +50,10 @@ def webhook():
         idMessage = message.get("id")
 
         # Evitar duplicados
-        if already_processed(idMessage, cnnx):
+        if connexion.already_processed(idMessage, cnnx):
             return jsonify({"status": "ok"}), 200
         else:
-            mark_processed(idMessage, cnnx)
+            connexion.mark_processed(idMessage, cnnx)
             print("Datos del json", data)
 
         # --- TU LÓGICA AQUÍ DENTRO ---
