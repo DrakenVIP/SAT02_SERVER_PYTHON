@@ -13,12 +13,9 @@ class ConnexionSql:
 )
     def __init__(self):
         try:
-            cnnx = mysql.connector.connect(
-                user=os.getenv("MYSQL_USER"),
-                host=os.getenv("MYSQL_HOST"),
-                database=os.getenv("MYSQL_DB"),
-                password=os.getenv("MYSQL_PASSWORD")
-            )
+            cnnx = ConnexionSql.pool.get_connection()
+            print("Conexión exitosa")
+            cnnx.close()
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
                 print("Usuario o contraseña incorrectos")
@@ -26,18 +23,15 @@ class ConnexionSql:
                 print("La base de datos no existe")
             else:
                 print(err)
-        else:
-            print("Conexión exitosa")
-            cnnx.close()
 
 
     def lookForUser(self, numberClient):
         cnnx = pool.get_connection()
-        cursor = cnnx.cursor()
-        sql = "SELECT 1 FROM Clients WHERE phoneNumber = %s LIMIT 1"
-        cursor.execute(sql, (numberClient,))
-        result = cursor.fetchone()
-        cursor.close()
+        with cnnx.cursor() as cur:
+            sql = "SELECT 1 FROM Clients WHERE phoneNumber = %s LIMIT 1"
+            cur.execute(sql, (numberClient,))
+            result = cur.fetchone()
+            cur.close()
         cnnx.close()
         return result is not None
     

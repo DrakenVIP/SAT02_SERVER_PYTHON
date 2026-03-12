@@ -51,7 +51,7 @@ def webhook():
         idMessage = message.get("id")
 
         # Evitar duplicados
-        if connexion.already_processed(idMessage):
+        if not connexion.already_processed(idMessage):
             return jsonify({"status": "ok"}), 200
         else:
             connexion.mark_processed(idMessage)
@@ -63,11 +63,13 @@ def webhook():
 
         # Cuando el usuario manda una palabra clave
         if messageText and messageText.upper() == "TONO":
+            messageText = ""
             sendMessage.welcomeMessage(message["from"])
             return jsonify({"status": "ok"}), 200
 
         # Cuando el usuario presiona agendar cita y no está registrado
         if idButton == resouceMenu.idButtonAgendar:
+            idButton = ""
             if connexion.lookForUser(message["from"]) is False:
                 sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                 sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
