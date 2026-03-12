@@ -2,7 +2,6 @@ import os
 import mysql.connector
 from mysql.connector import errorcode, pooling
 class ConnexionSql:
-    global pool
     pool = pooling.MySQLConnectionPool(
     pool_name="mypool",
     pool_size=5,
@@ -26,7 +25,7 @@ class ConnexionSql:
 
 
     def lookForUser(self, numberClient):
-        cnnx = pool.get_connection()
+        cnnx = ConnexionSql.pool.get_connection()
         with cnnx.cursor() as cur:
             sql = "SELECT 1 FROM Clients WHERE phoneNumber = %s LIMIT 1"
             cur.execute(sql, (numberClient,))
@@ -36,7 +35,7 @@ class ConnexionSql:
         return result is not None
     
     def register_user(self,fullName,idCard,phoneNumber):
-        cnnx = pool.get_connection()
+        cnnx = ConnexionSql.pool.get_connection()
         with cnnx.cursor() as cur:
             sql = "INSERT INTO Clients (fullName,idCard,phoneNumber) VALUES (%s, %s, %s)"
             cur.execute(sql, (fullName,idCard,phoneNumber))
@@ -46,7 +45,7 @@ class ConnexionSql:
 
     
     def already_processed(self, idMessage):
-        cnnx = pool.get_connection()
+        cnnx = ConnexionSql.pool.get_connection()
         with cnnx.cursor() as cur:
             sql = "SELECT 1 FROM processed_messages WHERE id_message = %s"
             cur.execute(sql, (idMessage,))
@@ -55,7 +54,7 @@ class ConnexionSql:
         return result is not None
 
     def mark_processed(self, idMessage):
-        cnnx = pool.get_connection()
+        cnnx = ConnexionSql.pool.get_connection()
         with cnnx.cursor() as cur:
             sql = "INSERT INTO processed_messages (id_message) VALUES (%s)"
             cur.execute(sql, (idMessage,))
