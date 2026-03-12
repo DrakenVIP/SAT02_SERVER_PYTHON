@@ -50,8 +50,9 @@ class ConnexionSql:
             sql = "SELECT 1 FROM processed_messages WHERE id_message = %s"
             cur.execute(sql, (idMessage,))
             result = cur.fetchone()
+            return result is not None
         cnnx.close()
-        return result is not None
+        
 
     def mark_processed(self, idMessage):
         cnnx = ConnexionSql.pool.get_connection()
