@@ -1,3 +1,4 @@
+import re
 class Resource:
       #Variables de texto de los diferentes menu
       welcomenToUser = '''
@@ -25,7 +26,25 @@ Nuestro sistema digital está diseñado para ayudarte a gestionar tus turnos de 
       idButtonVerTurno = "turno-button"
       idButtonInformacion = "informacion-button"
 
+      #Formulario
+      colocarNombre = "✍️ Por favor escribe tu nombre completo y pulsa el botón \"Enviar\" "
+      mensaje_ingreso_cedula = "🪪 Por favor, digita tu cédula sin guiones ➖🚫"
+      mensaje_error_nombre = "⚠️ Nombre no válido. 🚫 Vuelve a escribirlo, por favor ✍️"
+      mensaje_error_cedula = "⚠️ Cédula no válida. 🚫 Recuerda escribirla sin guiones ✍️"
 
+
+      #funcion para validar texto del usuario
+      def validar_text(nombre):
+            patron = r"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s'-]+$"
+            return bool(re.match(patron, nombre))
+      
+      #funcion para validar texto del usuario
+      def validar_text_cedula(cedula):
+            if len(cedula) == 11:
+                  patron = r"^[0987654321]+$"
+                  return bool(re.match(patron, cedula))
+            else:
+                  return False
 
       #Horas disponibles
       timeAvilable ="""

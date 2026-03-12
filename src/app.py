@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from src.messageMenu import Menu
 from src.resourceMenu import Resource
-from src.connexion import ConnexionSql, cnnx, po
+from src.connexion import ConnexionSql, cnnx, pooling
 from src.config import verify_token
 import os
 import json
@@ -21,6 +21,7 @@ def webhook():
     resouceMenu = Resource()
     # Se crea una instancia de la clase ConnexionSql que contiene los metodos para hacer consulta y insert en la base de datos
     connexion = ConnexionSql()
+
 
     # --------------------
     # GET (verificación)
@@ -50,13 +51,13 @@ def webhook():
         idMessage = message.get("id")
 
         # Evitar duplicados
-        if connexion.already_processed(idMessage, cnnx):
+        if connexion.already_processed(idMessage):
             return jsonify({"status": "ok"}), 200
         else:
-            connexion.mark_processed(idMessage, cnnx)
+            connexion.mark_processed(idMessage)
             print("Datos del json", data)
 
-        # --- TU LÓGICA AQUÍ DENTRO ---
+        # --- TU LÓGICA AQUÍ DENTRO --- 
 
 
 
@@ -67,14 +68,29 @@ def webhook():
 
         # Cuando el usuario presiona agendar cita y no está registrado
         if idButton == resouceMenu.idButtonAgendar:
-            if connexion.lookForUser(message["from"], cnnx) is False:
+            if connexion.lookForUser(message["from"]) is False:
                 sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
-                return jsonify({"status": "ok"}), 200
-            elif connexion.lookForUser(message["from"],cnnx) is True:
+                sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
+                saveName = message.get("text", {}).get("body", "").strip()
+                while resouceMenu.validar_text(saveName) == False:
+                    sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
+                    saveName = message.get("text", {}).get("body", "").strip()
+                if resouceMenu.validar_text(saveName):
+                    sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_ingreso_cedula)
+                    saveCedula = message.get("text", {}).get("body", "").strip()
+                    while resouceMenu.validar_text_cedula(saveCedula) == False:
+                        sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
+                        saveCedula= message.get("text", {}).get("body", "").strip()
+                    if resouceMenu.validar_text_cedula(saveCedula):
+                        sendMessage.simpleMessage(message["from"], f"Te has gegsitrado con exicto {saveName}")
+                    return jsonify({"status": "ok"}), 200
+            elif connexion.lookForUser(message["from"]) is True:
                 sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
                 return jsonify({"status": "ok"}), 200
         else:
             return jsonify({"status": "ok"}), 200
+        
+        
         
      # Respuesta final
     return jsonify({"status": "ok"}), 200

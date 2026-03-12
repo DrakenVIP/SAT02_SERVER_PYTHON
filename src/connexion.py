@@ -7,42 +7,66 @@ class ConnexionSql:
     pool_size=5,
     host= os.getenv("MYSQL_HOST"),
     user= os.getenv("MYSQL_USER"),
-    database= os.getenv("MYSQL_DB"),password=os.getenv("MYSQL_PASSWORD"),
-    database= os.getenv("MYSQL_DB")
+    database= os.getenv("MYSQL_DB"),
+    password=os.getenv("MYSQL_PASSWORD")
 )
-
-    # En cada request:
-    cnnx = pool.get_connection()
-
-    try:
-        cnnx = mysql.connector.connect(user= os.getenv("MYSQL_USER"),host= os.getenv("MYSQL_HOST"),database= os.getenv("MYSQL_DB"),password=os.getenv("MYSQL_PASSWORD"))
-    except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
+    def __init__(self):
+        try:
+            cnnx = mysql.connector.connect(
+                user=os.getenv("MYSQL_USER"),
+                host=os.getenv("MYSQL_HOST"),
+                database=os.getenv("MYSQL_DB"),
+                password=os.getenv("MYSQL_PASSWORD")
+            )
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Usuario o contraseña incorrectos")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                print("La base de datos no existe")
+            else:
+                print(err)
         else:
-            print(err)
-    else:
-        print('Good connecting')
+            print("Conexión exitosa")
+            cnnx.close()
 
-    def lookForUser(self,numberClient,cnnx):
+
+    def lookForUser(self, numberClient):
+        cnnx = self.pool.get_connection()
+        cursor = cnnx.cursor()
         sql = "SELECT 1 FROM Clients WHERE phoneNumber = %s LIMIT 1"
-        with cnnx.cursor() as cur:
-            cur.execute(sql, (numberClient,))
-            result = cur.fetchone()   # consumir aquí
+        cursor.execute(sql, (numberClient,))
+        result = cursor.fetchone()
+        cursor.close()
+        cnnx.close()
         return result is not None
     
-    def already_processed(self,idMessage, cnnx):
-        sql= "SELECT 1 FROM processed_messages WHERE id_message = %s"
+    def register_user(self,fullName,idCard,phoneNumber):
+        cnnx = self.pool.get_connection()
         with cnnx.cursor() as cur:
-             cur.execute(sql, (idMessage,))
-             return cur.fetchone() is not None
+            sql = "INSERT INTO Clients (fullName,idCard,phoneNumber) VALUES (%s, %s, %s)"
+            cur.execute(sql, (fullName,idCard,phoneNumber))
+            cnnx.commit()
+        cnnx.close()
+        
 
-    def mark_processed(self,idMessage, cnnx):
-        sql = "INSERT INTO processed_messages (id_message) VALUES (%s)"
+    
+    def already_processed(self, idMessage):
+        cnnx = self.pool.get_connection()
         with cnnx.cursor() as cur:
-             cur.execute(sql, (idMessage,))
-             cnnx.commit()
+            sql = "SELECT 1 FROM processed_messages WHERE id_message = %s"
+            cur.execute(sql, (idMessage,))
+            result = cur.fetchone()
+        cnnx.close()
+        return result is not None
+
+    def mark_processed(self, idMessage):
+        cnnx = self.pool.get_connection()
+        with cnnx.cursor() as cur:
+            sql = "INSERT INTO processed_messages (id_message) VALUES (%s)"
+            cur.execute(sql, (idMessage,))
+            cnnx.commit()
+        cnnx.close()
+    
+    
 
        
