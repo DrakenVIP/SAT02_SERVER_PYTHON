@@ -50,6 +50,9 @@ def webhook():
         idButton = (message.get("interactive", {}).get("button_reply", {}).get("id") or "").strip()
         idMessage = message.get("id")
 
+        print(f"Mensaje del usuario: {idMessage}")
+        print(f"Mensaje del usuario: {messageText}")
+
         # Evitar duplicados
         if not connexion.already_processed(idMessage):
             return jsonify({"status": "ok"}), 200
