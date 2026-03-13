@@ -45,6 +45,31 @@ Nuestro sistema digital está diseñado para ayudarte a gestionar tus turnos de 
                   return bool(re.match(patron, cedula))
             else:
                   return False
+            
+
+
+      #Maquina  de estados 
+      state_machine = {
+            "state":"idle",
+
+            "transition":{
+                  "idle":{ False: "waiting_name"},
+                  "waiting_name":{True: "waiting_cedula"},
+                  "waiting_cedula":{True: "registro_completado"}
+            }
+      }
+
+      def change_state(event):
+            estado_actual = Resource.state_machine["state"]
+            transition = Resource.state_machine["transition"].get(estado_actual)
+            nextState = transition.get(event)
+
+            if (nextState):
+                  Resource.state_machine["state"] = nextState
+                  return True
+            else:
+                  return False
+
 
       #Horas disponibles
       timeAvilable ="""

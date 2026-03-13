@@ -39,13 +39,14 @@ class ConnexionSql:
     
     def register_user(self,fullName,idCard,phoneNumber):
         cnnx = ConnexionSql.pool.get_connection()
-       try:
+        try:
             with cnnx.cursor() as cur:
-            sql = "INSERT INTO Clients (fullName,idCard,phoneNumber) VALUES (%s, %s, %s)"
-            cur.execute(sql, (fullName,idCard,phoneNumber))
-            cnnx.commit()
-       finally:
-        cnnx.close()
+                sql = "INSERT INTO Clients (fullName,idCard,phoneNumber) VALUES (%s, %s, %s)"
+                cur.execute(sql, (fullName,idCard,phoneNumber))
+                cnnx.commit()
+                cnnx.close()
+        finally:
+            cnnx.close()
         
 
     
@@ -53,23 +54,23 @@ class ConnexionSql:
         cnnx = ConnexionSql.pool.get_connection()
         try:
             with cnnx.cursor() as cur:
-            sql = "SELECT 1 FROM processed_messages WHERE id_message = %s"
-            cur.execute(sql, (idMessage,))
-            result = cur.fetchone()
-            return result is not None
+                sql = "SELECT 1 FROM processed_messages WHERE id_message = %s"
+                cur.execute(sql, (idMessage,))
+                result = cur.fetchone()
+                return result is not None
         finally:
-        cnnx.close()
+            cnnx.close()
         
 
     def mark_processed(self, idMessage):
         cnnx = ConnexionSql.pool.get_connection()
         try:
             with cnnx.cursor() as cur:
-            sql = "INSERT INTO processed_messages (id_message) VALUES (%s)"
-            cur.execute(sql, (idMessage,))
-            cnnx.commit()
+                sql = "INSERT INTO processed_messages (id_message) VALUES (%s)"
+                cur.execute(sql, (idMessage,))
+                cnnx.commit()
         finally:
-        cnnx.close()
+            cnnx.close()
     
     
 

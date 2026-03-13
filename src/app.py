@@ -66,28 +66,28 @@ def webhook():
 
             # Cuando el usuario presiona agendar cita
             if idButton == resouceMenu.idButtonAgendar:
-                if not connexion.lookForUser(message["from"]):
+                if resouceMenu.state_machine["state"] == "idle" and resouceMenu.change_state(connexion.lookForUser(message["from"])):
                     sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                     sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
 
                     saveName = message.get("text", {}).get("body", "").strip()
-                    while not resouceMenu.validar_text(saveName):
-                        sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
-                        saveName = message.get("text", {}).get("body", "").strip()
-
-                    if resouceMenu.validar_text(saveName):
+                    if resouceMenu.state_machine["state"] == "waiting_name" and resouceMenu.change_state(resouceMenu.validar_text(saveName)):
                         sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_ingreso_cedula)
                         saveCedula = message.get("text", {}).get("body", "").strip()
-                        while not resouceMenu.validar_text_cedula(saveCedula):
-                            sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
-                            saveCedula = message.get("text", {}).get("body", "").strip()
 
-                        if resouceMenu.validar_text_cedula(saveCedula):
-                            sendMessage.simpleMessage(message["from"], f"Te has registrado con éxito {saveName}")
-                        return jsonify({"status": "ok"}), 200
-                else:
-                    sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
-                    return jsonify({"status": "ok"}), 200
+                        if resouceMenu.state_machine["state"] == "waiting_cedula" and resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
+                            sendMessage.simpleMessage(message["from"], "registro completado")
+                        elif resouceMenu.state_machine["state"] == "waiting_cedula" and resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)) == False:
+                            sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
+
+
+                    elif resouceMenu.state_machine["state"] == "waiting_name" and resouceMenu.change_state(resouceMenu.validar_text(saveName)) == False:
+                        sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
+
+            else:
+                resouceMenu.state_machine["state"] = "idle"
+                sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
+                return jsonify({"status": "ok"}), 200
 
             # Respuesta final si no cayó en ningún caso
             return jsonify({"status": "ok"}), 200
