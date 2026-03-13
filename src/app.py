@@ -74,7 +74,7 @@ def webhook():
 
         # Flujo de registro
         if (
-            resouceMenu.state_machine.get("state") == "iniciar"
+            resouceMenu.state_machine["state"]== "iniciar"
             and not resouceMenu.change_state(event=connexion.lookForUser(message["from"]))
         ):
             sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
@@ -82,7 +82,7 @@ def webhook():
             return jsonify({"status": "ok"}), 200
 
         # Capturar y validar nombre
-        if resouceMenu.state_machine.get("state") == "waiting_name":
+        if resouceMenu.state_machine["state"] == "waiting_name":
             saveName = message.get("text", {}).get("body", "").strip()
             if resouceMenu.change_state(resouceMenu.validar_text(saveName)):
                 sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_ingreso_cedula)
@@ -92,7 +92,7 @@ def webhook():
                 return jsonify({"status": "ok"}), 200
 
         # Capturar y validar cédula
-        if resouceMenu.state_machine.get("state") == "waiting_cedula":
+        if resouceMenu.state_machine["state"] == "waiting_cedula":
             saveCedula = message.get("text", {}).get("body", "").strip()
             if resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
                 sendMessage.simpleMessage(message["from"], "registro completado")
