@@ -66,7 +66,11 @@ def webhook():
 
             # Cuando el usuario presiona agendar cita
             if idButton == resouceMenu.idButtonAgendar:
-                if resouceMenu.state_machine["state"] == "idle" and resouceMenu.change_state(connexion.lookForUser(message["from"])):
+                resouceMenu.state_machine["state"] = "iniciar"
+                sendMessage.simpleMessage(message["from"], "iniciando app")
+                return jsonify({"status": "ok"}), 200
+
+            if resouceMenu.state_machine["state"] == "iniciar" and resouceMenu.change_state(connexion.lookForUser(message["from"])):
                     sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                     sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
 
@@ -83,11 +87,6 @@ def webhook():
 
                     elif resouceMenu.state_machine["state"] == "waiting_name" and resouceMenu.change_state(resouceMenu.validar_text(saveName)) == False:
                         sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
-
-            else:
-                resouceMenu.state_machine["state"] = "idle"
-                sendMessage.simpleMessage(message["from"], resouceMenu.timeAvilable)
-                return jsonify({"status": "ok"}), 200
 
             # Respuesta final si no cayó en ningún caso
             return jsonify({"status": "ok"}), 200

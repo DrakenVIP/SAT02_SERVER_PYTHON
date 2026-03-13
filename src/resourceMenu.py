@@ -53,7 +53,8 @@ Nuestro sistema digital está diseñado para ayudarte a gestionar tus turnos de 
             "state":"idle",
 
             "transition":{
-                  "idle":{ False: "waiting_name"},
+                  "idle":{True: "iniciar"},
+                  "iniciar":{ False: "waiting_name"},
                   "waiting_name":{True: "waiting_cedula"},
                   "waiting_cedula":{True: "registro_completado"}
             }
