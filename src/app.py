@@ -70,7 +70,7 @@ def webhook():
                 sendMessage.simpleMessage(message["from"], "iniciando app")
                 return jsonify({"status": "ok"}), 200
 
-            if resouceMenu.state_machine["state"] == "iniciar" and resouceMenu.change_state(event = connexion.lookForUser(message["from"])):
+            if resouceMenu.state_machine["state"] == "iniciar" and not resouceMenu.change_state(event = connexion.lookForUser(message["from"])):
                     sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                     sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
                     return jsonify({"status": "ok"}), 200
@@ -91,6 +91,7 @@ def webhook():
 
                     elif resouceMenu.state_machine["state"] == "waiting_name" and resouceMenu.change_state(resouceMenu.validar_text(saveName)) == False:
                         sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
+                        return jsonify({"status": "ok"}), 200
 
             # Respuesta final si no cayó en ningún caso
             return jsonify({"status": "ok"}), 200
