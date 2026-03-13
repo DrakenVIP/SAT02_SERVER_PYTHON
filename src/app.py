@@ -72,7 +72,7 @@ def webhook():
             resouceMenu.state_machine["state"] = "iniciar"
             sendMessage.simpleMessage(message["from"], "iniciando app")
             print("Estado despues del cambio:", resouceMenu.state_machine["state"] )
-            print("es que estado esta lookfor:", connexion.lookForUser(message["from"])
+            print("es que estado esta lookfor:", connexion.lookForUser(message["from"]))
 
             return jsonify({"status": "ok"}), 200
             
