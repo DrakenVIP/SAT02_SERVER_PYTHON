@@ -70,7 +70,7 @@ def webhook():
                 sendMessage.simpleMessage(message["from"], "iniciando app")
                 return jsonify({"status": "ok"}), 200
 
-            if resouceMenu.state_machine["state"] == "iniciar" and resouceMenu.change_state(connexion.lookForUser(message["from"])):
+            if resouceMenu.state_machine["state"] == "iniciar" and resouceMenu.change_state(event = connexion.lookForUser(message["from"])):
                     sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                     sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
 
