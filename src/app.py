@@ -73,20 +73,28 @@ def webhook():
             if resouceMenu.state_machine["state"] == "iniciar" and resouceMenu.change_state(event = connexion.lookForUser(message["from"])):
                     sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
                     sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
+                    return jsonify({"status": "ok"}), 200
 
                     saveName = message.get("text", {}).get("body", "").strip()
                     if resouceMenu.state_machine["state"] == "waiting_name" and resouceMenu.change_state(resouceMenu.validar_text(saveName)):
                         sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_ingreso_cedula)
                         saveCedula = message.get("text", {}).get("body", "").strip()
+                         return jsonify({"status": "ok"}), 200
 
                         if resouceMenu.state_machine["state"] == "waiting_cedula" and resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
                             sendMessage.simpleMessage(message["from"], "registro completado")
+                            return jsonify({"status": "ok"}), 200
+
                         elif resouceMenu.state_machine["state"] == "waiting_cedula" and resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)) == False:
                             sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
-
+                            return jsonify({"status": "ok"}), 200
 
                     elif resouceMenu.state_machine["state"] == "waiting_name" and resouceMenu.change_state(resouceMenu.validar_text(saveName)) == False:
                         sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
 
             # Respuesta final si no cayó en ningún caso
             return jsonify({"status": "ok"}), 200
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
