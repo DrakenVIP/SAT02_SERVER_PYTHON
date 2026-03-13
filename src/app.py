@@ -68,10 +68,14 @@ def webhook():
 
         # Cuando el usuario presiona agendar cita
         if idButton == resouceMenu.idButtonAgendar:
+            print("Estado antes del cambio:", resouceMenu.state_machine["state"] )
             resouceMenu.state_machine["state"] = "iniciar"
             sendMessage.simpleMessage(message["from"], "iniciando app")
-            return jsonify({"status": "ok"}), 200
+            print("Estado despues del cambio:", resouceMenu.state_machine["state"] )
+            print("es que estado esta lookfor:", connexion.lookForUser(message["from"])
 
+            return jsonify({"status": "ok"}), 200
+            
         # Flujo de registro
         if (
             resouceMenu.state_machine["state"]== "iniciar"
