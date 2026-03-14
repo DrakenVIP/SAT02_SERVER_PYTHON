@@ -77,9 +77,7 @@ def webhook():
             return jsonify({"status": "ok"}), 200
             
         # Flujo de registro
-        if (
-            resouceMenu.state_machine["state"]== "iniciar"
-            and not connexion.lookForUser(message["from"]):
+        if resouceMenu.state_machine["state"]== "iniciar" and not connexion.lookForUser(message["from"]):
             resouceMenu.change_state(False)
             sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
             sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
