@@ -64,7 +64,6 @@ def webhook():
         # Cuando el usuario manda una palabra clave
         if messageText and messageText.upper() == "TONO":
             sendMessage.welcomeMessage(message["from"])
-            return jsonify({"status": "ok"}), 200
 
         # Cuando el usuario presiona agendar cita
         if idButton == resouceMenu.idButtonAgendar:
@@ -89,10 +88,8 @@ def webhook():
             if resouceMenu.change_state(resouceMenu.validar_text(saveName)):
                 sendMessage.simpleMessage(message["from"], "Nombre registrado correctamente")
                 resouceMenu.change_state(True)
-                return jsonify({"status": "ok"}), 200
             else:
                 sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
-                return jsonify({"status": "ok"}), 200
 
         # Capturar y validar cédula
         if resouceMenu.state_machine["state"] == "waiting_cedula":
@@ -100,12 +97,11 @@ def webhook():
             if resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
                 sendMessage.simpleMessage(message["from"], "registro completado")
                 resouceMenu.change_state(True)
-                return jsonify({"status": "ok"}), 200
             else:
                 sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
-                return jsonify({"status": "ok"}), 200
 
         # Respuesta final si no cayó en ningún caso
+        resouceMenu.state_machine["state"]== "idle"
         return jsonify({"status": "ok"}), 200
 
 
