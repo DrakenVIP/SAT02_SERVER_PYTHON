@@ -80,7 +80,6 @@ def webhook():
         if (
             resouceMenu.state_machine["state"]== "iniciar"
             and not connexion.lookForUser(message["from"]):
-        ):
             resouceMenu.change_state(False)
             sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
             sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
