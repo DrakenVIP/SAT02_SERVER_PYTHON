@@ -88,18 +88,17 @@ def webhook():
                     resouceMenu.change_state(True)
             elif not resouceMenu.state_machine["state"] == "waiting_name" and not resouceMenu.change_state(resouceMenu.validar_text(saveName)):
                 sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
-                
+
             saveCedula = message.get("text", {}).get("body", "").strip()
-            if resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
+            if resouceMenu.state_machine["state"] == "waiting_cedula":
             # Capturar y validar cédula
-                if resouceMenu.state_machine["state"] == "waiting_cedula" and resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
+                if resouceMenu.state_machine["state"] == "waiting_cedula" and resouceMenu.validar_text_cedula(saveCedula):
                     sendMessage.simpleMessage(message["from"], "registro completado")
                     resouceMenu.change_state(True)
-                elif not resouceMenu.state_machine["state"] == "waiting_cedula" and not resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
+                else: 
                     sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
 
             # Respuesta final si no cayó en ningún caso
-            resouceMenu.state_machine["state"]== "idle"
             return jsonify({"status": "ok"}), 200
 
 
