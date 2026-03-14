@@ -6,7 +6,8 @@ from src.config import verify_token
 import os
 import json
 import requests
-
+global resouceMenu
+resouceMenu = Resource()
 app = Flask(__name__)
 
 
@@ -19,7 +20,6 @@ def home():
 def webhook():
     # Instancias de las clases
     sendMessage = Menu()
-    resouceMenu = Resource()
     connexion = ConnexionSql()
 
     # --------------------
