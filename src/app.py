@@ -74,7 +74,6 @@ def webhook():
             print("Estado despues del cambio:", resouceMenu.state_machine["state"] )
             print("es que estado esta lookfor:", connexion.lookForUser(message["from"]))
 
-            return jsonify({"status": "ok"}), 200
             
         print("Estado despues del cambio fuera del if:", resouceMenu.state_machine["state"] )            
         # Flujo de registro
@@ -82,7 +81,7 @@ def webhook():
             resouceMenu.change_state(False)
             sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
             sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
-            return jsonify({"status": "ok"}), 200
+            
 
         # Capturar y validar nombre
         if resouceMenu.state_machine["state"] == "waiting_name":
