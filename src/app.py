@@ -69,7 +69,7 @@ def webhook():
         # Cuando el usuario presiona agendar cita
         if idButton == resouceMenu.idButtonAgendar:
             print("Estado antes del cambio:", resouceMenu.state_machine["state"] )
-            resouceMenu.state_machine["state"] = "iniciar"
+            resouceMenu.change_state(True)
             sendMessage.simpleMessage(message["from"], "iniciando app")
             print("Estado despues del cambio:", resouceMenu.state_machine["state"] )
             print("es que estado esta lookfor:", connexion.lookForUser(message["from"]))
@@ -79,8 +79,9 @@ def webhook():
         # Flujo de registro
         if (
             resouceMenu.state_machine["state"]== "iniciar"
-            and not resouceMenu.change_state(event=connexion.lookForUser(message["from"]))
+            and not connexion.lookForUser(message["from"]):
         ):
+            resouceMenu.change_state(False)
             sendMessage.simpleMessage(message["from"], resouceMenu.userDontRegistre)
             sendMessage.simpleMessage(message["from"], resouceMenu.colocarNombre)
             return jsonify({"status": "ok"}), 200
@@ -89,7 +90,8 @@ def webhook():
         if resouceMenu.state_machine["state"] == "waiting_name":
             saveName = message.get("text", {}).get("body", "").strip()
             if resouceMenu.change_state(resouceMenu.validar_text(saveName)):
-                sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_ingreso_cedula)
+                sendMessage.simpleMessage(message["from"], "Nombre registrado correctamente")
+                resouceMenu.change_state(True)
                 return jsonify({"status": "ok"}), 200
             else:
                 sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_nombre)
@@ -100,6 +102,7 @@ def webhook():
             saveCedula = message.get("text", {}).get("body", "").strip()
             if resouceMenu.change_state(resouceMenu.validar_text_cedula(saveCedula)):
                 sendMessage.simpleMessage(message["from"], "registro completado")
+                resouceMenu.change_state(True)
                 return jsonify({"status": "ok"}), 200
             else:
                 sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
