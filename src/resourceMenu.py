@@ -34,12 +34,12 @@ Nuestro sistema digital está diseñado para ayudarte a gestionar tus turnos de 
 
 
       #funcion para validar texto del usuario
-      def validar_text(nombre):
+      def validar_text(self,nombre):
             patron = r"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s'-]+$"
             return bool(re.match(patron, nombre))
       
       #funcion para validar texto del usuario
-      def validar_text_cedula(cedula):
+      def validar_text_cedula(self,cedula):
             if len(cedula) == 11:
                   patron = r"^[0987654321]+$"
                   return bool(re.match(patron, cedula))
@@ -60,7 +60,7 @@ Nuestro sistema digital está diseñado para ayudarte a gestionar tus turnos de 
             }
       }
 
-      def change_state(event):
+      def change_state(self,event):
             estado_actual = Resource.state_machine["state"]
             transition = Resource.state_machine["transition"].get(estado_actual)
             nextState = transition.get(event)
