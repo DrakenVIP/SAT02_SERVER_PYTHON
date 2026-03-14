@@ -76,6 +76,7 @@ def webhook():
 
             return jsonify({"status": "ok"}), 200
             
+        print("Estado despues del cambio fuera del if:", resouceMenu.state_machine["state"] )            
         # Flujo de registro
         if resouceMenu.state_machine["state"]== "iniciar" and not connexion.lookForUser(message["from"]):
             resouceMenu.change_state(False)
