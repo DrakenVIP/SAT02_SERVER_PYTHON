@@ -98,8 +98,8 @@ def webhook():
                 else: 
                     sendMessage.simpleMessage(message["from"], resouceMenu.mensaje_error_cedula)
 
-            # Respuesta final si no cayó en ningún caso
-            return jsonify({"status": "ok"}), 200
+    # Respuesta final si no cayó en ningún caso
+    return jsonify({"status": "ok"}), 200
 
 
 if __name__ == "__main__":
